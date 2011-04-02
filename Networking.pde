@@ -52,20 +52,22 @@ void oscEvent(OscMessage message)
   address = address.trim();
   String name = "";
   String type = "Slider";
+  float defaultValue = 0;
   float minimum = 0;
   float maximum = 1;
   float stepsize = 0;
   float value = 0;
   
   //read arguments if tjis is an add or update message
-  if (message.checkTypetag("sssffff"))
+  if (message.checkTypetag("sssfffff"))
   {
     name = message.get(1).stringValue();
     type = message.get(2).stringValue();
-    minimum = message.get(3).floatValue();
-    maximum = message.get(4).floatValue();
-    stepsize = message.get(5).floatValue();
-    value = message.get(6).floatValue();
+    defaultValue = message.get(3).floatValue();
+    minimum = message.get(4).floatValue();
+    maximum = message.get(5).floatValue();
+    stepsize = message.get(6).floatValue();
+    value = message.get(7).floatValue();
   }
    
   if (message.checkAddrPattern("/k/add")) 
@@ -78,11 +80,11 @@ void oscEvent(OscMessage message)
       if (type.equals("Bang"))
         rm = new RemoteBang(id, address, name, minimum, maximum, value); 
       else if (type.equals("Toggle"))
-        rm = new RemoteToggle(id, address, name, minimum, maximum, value); 
+        rm = new RemoteToggle(id, address, name, defaultValue, minimum, maximum, value); 
       else if (type.equals("Slider"))
-        rm = new RemoteSlider(id, address, name, minimum, maximum, stepsize, value);
+        rm = new RemoteSlider(id, address, name, defaultValue, minimum, maximum, stepsize, value);
       else //if (type.equals("Endless"))
-        rm = new RemoteEndless(id, address, name, minimum, maximum, stepsize, value); 
+        rm = new RemoteEndless(id, address, name, defaultValue, minimum, maximum, stepsize, value); 
 
       synchronized(this)
       {
@@ -119,5 +121,5 @@ void oscEvent(OscMessage message)
   }
     
   //recompute the values height
-  GValueHeight = (height - CModifierPanelHeight) / FRemoteValues.size();
+  GValueHeight = (height - GValueTop) / FRemoteValues.size();
 }

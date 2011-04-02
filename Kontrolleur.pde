@@ -4,33 +4,31 @@
 //Daniel Sauter et al: http://code.google.com/p/ketai/
 
 //todo
-//- reset on start
-//- check save/loadfile
-//- better endless drawing
-//- label modifiers
-//- reset on doubleclick: introduce default value
+//- draw values at pointer
+//- draw xypressure at pointer if no value present
+
 //- send touches as tuio
-//- help page: explaining add/update/remove messages
 //- settings page: display device IP, device port
 //- support screen orientations
-
-//- support reset of individual values (via modifier?)
 //- support radiobutton, XYPressure, color, string
 //- multiple parameter pages (one per address-space)
 //- ordering/layout of values
 //- support spreads
 
-PFont fontA;
+PFont fontA, fontB;
 
 HashMap<String, RemoteValue> FRemoteValues;  //key: osc-address
 HashMap<Integer, Touch> FTouchedValues;      //key: remoteValueID
 HashMap<Integer, Touch> FTouches;            //key: pointerID
 
-int CDark = 154;
-int CBright = 192;
+int CBack = 77;;
+int CSlider = 102;
+int CText = 230;
+int CSeparators = 0;
+int CTouch = 154;
 int CModifierPanelHeight = 100;
 int GValueHeight = height - CModifierPanelHeight;
-int GValueTop = CModifierPanelHeight;
+int GValueTop;
 String FLocalIP;
 
 void setup() 
@@ -42,11 +40,14 @@ void setup()
   FTouches = new HashMap<Integer, Touch>();
   
   fontA = loadFont("Verdana-24.vlw");
-  textFont(fontA, 24);
+  fontB = loadFont("Verdana-48.vlw");
   
   initMenu();
   if (loadSettings())
+  {
     initNetwork();
+    reset();
+  }
   else
     toggleMenu();
 
@@ -65,22 +66,43 @@ void setup()
 
 void draw() 
 {
-  background(CDark);  
-  text(FLocalIP, width - 300, height - 100);
+  background(CBack);  
+  //text(FLocalIP, width - 300, height - 100);
   
-  //draw modifierpanel
-  int bW = width / 4;
-  for (int i = 0; i < 4; i++)
+  if (FMenuVisible)
   {
-    if (FModifierID == i)
-      fill(CDark);
-    else
-      fill(200);
-    rect(bW * i + 5, 5, bW - 10, CModifierPanelHeight - 10);
+    drawMenu();
+    return;
   }
-
+  
+  if (FShowModifier.isChecked())
+  {
+    //draw modifier
+    int spalt = 5;
+    int bW = (width - 3 * spalt) / 4;
+    
+    noStroke();
+    float x = 0;
+    String[] mods = {"/100", "/10", "*10", "*100"};
+    for (int i = 0; i < 4; i++)
+    {
+      if (FModifierID == i)
+        fill(CBack);
+      else
+        fill(CSlider);
+      
+      rect(x, 0, bW - spalt/2, CModifierPanelHeight);
+      fill(CBack);
+      textAlign(CENTER);
+      textFont(fontA, 24);
+      text(mods[i], x + bW/2, CModifierPanelHeight/2 + 5);
+      
+      x += bW + spalt;
+    }
+  }
+    
   //draw values
-  fill(CBright);  
+  textFont(fontB, 48);
   synchronized(this)
   {
     for(String key: FRemoteValues.keySet())
@@ -89,14 +111,24 @@ void draw()
       rm.paint();
     }
   }
+  
+  //draw value separators
+  stroke(CSeparators);
+  float y = GValueTop;
+  for (int i = 0; i < FRemoteValues.size(); i++)
+  {
+    line(0, y, width, y);
+    y += GValueHeight;
+  }
  
   //draw touchpoints
-  fill(0);
+  fill(CTouch);
+  noStroke();
   synchronized(this)
   {
     for(Integer key: FTouches.keySet())
     {
-      Touch t = (Touch) FTouches.get(key);
+      Touch t = FTouches.get(key);
       t.paint();
     }
   }

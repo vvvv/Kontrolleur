@@ -5,10 +5,11 @@ class RemoteValue
   public String Name;
   public float Minimum;
   public float Maximum;
+  public float DefaultValue;
   public float Value;  
   protected boolean FValueChanged;
   protected boolean FMouseDown = false;
-  protected int FSliderWidth = 50;
+  protected int FSliderWidth = 30;
   protected float FSliderY;
   protected float FTextY;
   protected float FLastX;
@@ -17,11 +18,12 @@ class RemoteValue
   protected float FButtonX;
   protected float FButtonY;
   
-  RemoteValue(int id, String address, String name, float minimum, float maximum, float value)
+  RemoteValue(int id, String address, String name, float defaultValue, float minimum, float maximum, float value)
   {
     ID = id;
     FAddress = address;
     Name = name;
+    DefaultValue = defaultValue;
     Minimum = minimum;
     Maximum = maximum;
     Value = value;
@@ -47,6 +49,12 @@ class RemoteValue
   void changeValue(float x)
   {}
   
+  void resetValue()
+  {
+    Value = DefaultValue;
+    FValueChanged = true;
+  }
+  
   void releaseMouse()
   {
     FMouseDown = false;
@@ -54,11 +62,12 @@ class RemoteValue
  
   void paint() 
   {
-    fill(CBright);
+    fill(CSlider);
+    noStroke();
 
     float y = GValueTop + ID * GValueHeight;
-    FSliderY = y + 3;
-    FTextY = y + GValueHeight - 20;
+    FSliderY = y + 15;
+    FTextY = y + GValueHeight - 18;
 
     FButtonHeight = max(GValueHeight / 3, FSliderWidth);
     FButtonWidth = width / 3;
@@ -68,9 +77,9 @@ class RemoteValue
   
   void paintLabel()
   {
+    fill(CText);
     if (FShowLabels.isChecked())
     {
-      fill(0);
       textAlign(LEFT);
       text(Name, 15, FTextY);    
     }
@@ -78,9 +87,9 @@ class RemoteValue
   
   void paintValue()
   {
+    fill(CText);
     if (FShowValues.isChecked())
     {
-      fill(0);
       textAlign(RIGHT);
       text(String.format("%.4f", Value), width - 15, FTextY);
     }
@@ -91,28 +100,44 @@ class RemoteSlider extends RemoteValue
 {
   float FStepSize; 
   
-  RemoteSlider(int id, String address, String name, float minimum, float maximum, float stepsize, float value)
+  RemoteSlider(int id, String address, String name, float defaultValue, float minimum, float maximum, float stepsize, float value)
   {
-    super(id, address, name, minimum, maximum, value);
+    super(id, address, name, defaultValue, minimum, maximum, value);
     FStepSize = stepsize;
   }
   
   void changeValue(float x)
   {
-    Value = map(x, 0, width, Minimum, Maximum);
+    float range = (Maximum + 1) - Minimum;
+    float posCount = range / FStepSize;
+    x = map(x, 0, width, 0, 1);
+    int pos = (int) (posCount * x);
+    Value = Minimum + pos * FStepSize;
+    Value = constrain(Value, Minimum, Maximum);
     FValueChanged = true;
   }
   
   void paint()
   {
     super.paint();
-    
-    noStroke();
+
     float x = map(Value, Minimum, Maximum, 0, width) - FSliderWidth/2;
-    rect(x, FSliderY, FSliderWidth, GValueHeight-6);
+    float off = FSliderWidth*0.75;
+    rect(x - off, FSliderY, FSliderWidth, GValueHeight-30);
+    rect(x + off, FSliderY, FSliderWidth, GValueHeight-30);
     
     paintLabel();
     paintValue();
+  }
+  
+  void paintValue()
+  {
+    fill(CText);
+    if (FShowValues.isChecked())
+    {
+      textAlign(RIGHT);
+      text(String.format("%d", (int)Value), width - 15, FTextY);
+    }
   }
 }
 
@@ -120,9 +145,9 @@ class RemoteEndless extends RemoteValue
 {
   float FStepSize; 
   
-  RemoteEndless(int id, String address, String name, float minimum, float maximum, float stepsize, float value)
+  RemoteEndless(int id, String address, String name, float defaultValue, float minimum, float maximum, float stepsize, float value)
   {
-    super(id, address, name, minimum, maximum, value);
+    super(id, address, name, defaultValue, minimum, maximum, value);
     FStepSize = stepsize;
   }
   
@@ -144,12 +169,13 @@ class RemoteEndless extends RemoteValue
   void paint()
   {
     super.paint();
-    noStroke();
-    int count = 20;
+
+    int count = 15;
+    float w = width + FSliderWidth;
     for (int i = 0; i < count; i++)
     {
-      float x = (FLastX + (width/count) * i) % width;
-      rect(x, FSliderY, 2, GValueHeight-6);
+      float x = (FLastX + (w/count) * i) % w - FSliderWidth;
+      rect(x, FSliderY, FSliderWidth/2, GValueHeight-30);
     }      
     
     paintLabel();
@@ -161,7 +187,7 @@ class RemoteBang extends RemoteValue
 {
   RemoteBang(int id, String address, String name, float minimum, float maximum, float value)
   {
-    super(id, address, name, minimum, maximum, value);
+    super(id, address, name, 0, minimum, maximum, value);
   }
   
   void changeValue(float x)
@@ -196,9 +222,9 @@ class RemoteBang extends RemoteValue
 
 class RemoteToggle extends RemoteValue
 {
-  RemoteToggle(int id, String address, String name, float minimum, float maximum, float value)
+  RemoteToggle(int id, String address, String name, float defaultValue, float minimum, float maximum, float value)
   {
-    super(id, address, name, minimum, maximum, value);
+    super(id, address, name, defaultValue, minimum, maximum, value);
   }
   
   void changeValue(float x)

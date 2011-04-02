@@ -7,6 +7,7 @@ PEditText FIPField;
 PEditText FPortField;
 PButton FOKButton;
 PCheckBox FStickySlider;
+PCheckBox FShowModifier;
 PCheckBox FShowLabels;
 PCheckBox FShowValues;
 PCheckBox FSendTouches;
@@ -19,46 +20,50 @@ boolean FTargetChanged = true;
 
 void initMenu()
 {
+  int col2x = width - 245;
   FWidgetContainer = new PWidgetContainer(this);
 
-  FIPField = new PEditText(20, 110, 230, 70);
+  FIPField = new PEditText(col2x, 110, 230, 70);
   FIPField.setText("192.168.0.255");
   FIPField.setImeOptions(EditorInfo.IME_ACTION_DONE);
   FIPField.setCloseImeOnDone(true);
   FWidgetContainer.addWidget(FIPField); 
   
-  FPortField = new PEditText(20, 180, 150, 70);
+  FPortField = new PEditText(col2x, 180, 150, 70);
   FPortField.setText("4444");
   FPortField.setInputType(InputType.TYPE_CLASS_NUMBER);
   FPortField.setImeOptions(EditorInfo.IME_ACTION_DONE);
   FPortField.setCloseImeOnDone(true);
   FWidgetContainer.addWidget(FPortField); 
  
-  FStickySlider = new PCheckBox(20, 250, "Sticky Slider");
+  FStickySlider = new PCheckBox(15, 270, "Sticky Slider");
   FWidgetContainer.addWidget(FStickySlider);
   
-  FShowLabels = new PCheckBox(20, 320, "Show Labels");
+  FShowModifier = new PCheckBox(col2x, 270, "Show Modifier");
+  FWidgetContainer.addWidget(FShowModifier);
+  
+  FShowLabels = new PCheckBox(15, 340, "Show Labels");
   FShowLabels.setChecked(true);
   FWidgetContainer.addWidget(FShowLabels);
   
-  FShowValues = new PCheckBox(20, 390, "Show Values");
+  FShowValues = new PCheckBox(col2x, 340, "Show Values");
   FShowValues.setChecked(true);
   FWidgetContainer.addWidget(FShowValues);
  
-  FSendTouches = new PCheckBox(20, 460, "Send Touches");
+  FSendTouches = new PCheckBox(15, 430, "Send Touches");
   FSendTouches.setChecked(true);
   FWidgetContainer.addWidget(FSendTouches);
   
-  FSendAcceleration = new PCheckBox(20, 530, "Send Acceleration");
+  FSendAcceleration = new PCheckBox(15, 500, "Send Acceleration");
   FWidgetContainer.addWidget(FSendAcceleration);
   
-  FSendOrientation = new PCheckBox(20, 600, "Send Orientation");
+  FSendOrientation = new PCheckBox(15, 570, "Send Orientation");
   FWidgetContainer.addWidget(FSendOrientation);
   
-  FSendMagneticField = new PCheckBox(20, 670, "Send Magnetic Field");
+  FSendMagneticField = new PCheckBox(15, 640, "Send Magnetic Field");
   FWidgetContainer.addWidget(FSendMagneticField);
 
-  FOKButton = new PButton(20, height - 100, 150, 70, "OK");
+  FOKButton = new PButton(15, height - 100, 150, 70, "OK");
   FWidgetContainer.addWidget(FOKButton);
   FWidgetContainer.hide();
 }
@@ -74,6 +79,13 @@ void onClickWidget(PWidget widget)
     FTargetChanged = true;
   else if (widget == FPortField)
     FTargetChanged = true;
+  else if (widget == FShowModifier)
+  {
+    if (FShowModifier.isChecked())
+      GValueTop = CModifierPanelHeight;
+    else
+      GValueTop = 0;
+  }
 }
 
 void toggleMenu()
@@ -94,6 +106,21 @@ void toggleMenu()
     FWidgetContainer.show();
     FMenuVisible = true;
   }
+}
+
+void drawMenu()
+{
+  fill(255);
+  textAlign(LEFT);
+  textFont(fontB, 48);
+  text("Kontrolleur", 15, 50); 
+  textFont(fontA, 24);
+  text("parameters to go...", 50, 80); 
+  
+  textFont(fontA, 24);
+  text("Target IP Address", 15, 150); 
+  textFont(fontA, 24);
+  text("Target UDP Port", 15, 220); 
 }
 
 void reset()

@@ -10,6 +10,7 @@ class Touch
   int PointerID;
   int RemoteValueID;
   boolean Touched = false;
+  boolean ResetValue = false;
   
   Touch(MotionEvent me, int index, int remoteValueID)
   {
@@ -50,7 +51,8 @@ class Touch
   {
     float r = Pressure + 40; 
     ellipse(motionX, motionY, r, r);
-    text(Integer.toString(PointerID), motionX-5, motionY - (Pressure+50));
+    textAlign(CENTER);
+    text(Integer.toString(PointerID), motionX, motionY - (Pressure+50));
   }
 }
 
@@ -145,7 +147,11 @@ public boolean surfaceTouchEvent(MotionEvent me)
           Touch t = FTouchedValues.get(rm.ID);
           if (t.Touched)
           {
-            rm.changeValue(t.motionX);
+            if (t.ResetValue)
+              rm.resetValue();
+            else
+              rm.changeValue(t.motionX);
+                          
             rm.addMessage(bundle);
           }
         }
@@ -172,10 +178,19 @@ public boolean surfaceTouchEvent(MotionEvent me)
     if (y > GValueTop)
       remoteValueID = (int) ((y - GValueTop) / GValueHeight);
 
-    Touch t = new Touch(me, pointerIndex, remoteValueID);
+    Touch t = new Touch(me, pointerIndex, remoteValueID);  
     synchronized(this)
     {
       FTouches.put(pointerID, t);
+      //if this value is already touched by another pointer
+      //this is a reset gesture
+      if (FTouchedValues.containsKey(remoteValueID))
+      {
+        Touch existing = FTouchedValues.get(remoteValueID);
+        if (t.PointerID != existing.PointerID)
+          t.ResetValue = true;
+      }
+
       FTouchedValues.put(remoteValueID, t);
     }
   }
