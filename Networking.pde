@@ -123,3 +123,44 @@ void oscEvent(OscMessage message)
   //recompute the values height
   GValueHeight = (height - GValueTop) / FRemoteValues.size();
 }
+
+//ripped of: http://www.droidnova.com/get-the-ip-address-of-your-device,304.html
+//seems to be the only working way to get the IP
+String getLocalIP() 
+{
+  try 
+  {
+    for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) 
+    {
+      NetworkInterface intf = en.nextElement();
+      for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) 
+      {
+        InetAddress inetAddress = enumIpAddr.nextElement();
+        if (!inetAddress.isLoopbackAddress()) 
+        {
+          return inetAddress.getHostAddress().toString();
+        }
+      }
+    }
+  } 
+  catch (SocketException ex) {}
+  return CNoNetwork;
+
+/*  //not working: get device IP
+  WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+  WifiInfo info = wifi.getConnectionInfo();
+  FLocalIP = Formatter.formatIpAddress(info.getIpAddress());*/
+}
+
+String getTargetIP()
+{
+  if (!FLocalIP.equals(CNoNetwork))
+  {
+    //split ip and replace last byte with 255 which makes a good default target IP
+    String[] bytes;
+    bytes = FLocalIP.split("\\.");
+    return bytes[0] + "." + bytes[1] + "." + bytes[2] + ".255";
+  }
+  else
+    return CNoNetwork;    
+}

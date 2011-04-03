@@ -24,8 +24,9 @@ void initMenu()
   FWidgetContainer = new PWidgetContainer(this);
 
   FIPField = new PEditText(col2x, 90, 230, 70);
-  FIPField.setText("192.168.0.255");
+  FIPField.setText(getTargetIP());
   FIPField.setImeOptions(EditorInfo.IME_ACTION_DONE);
+  FIPField.setInputType(InputType.TYPE_CLASS_NUMBER);
   FIPField.setCloseImeOnDone(true);
   FWidgetContainer.addWidget(FIPField); 
   
@@ -36,34 +37,36 @@ void initMenu()
   FPortField.setCloseImeOnDone(true);
   FWidgetContainer.addWidget(FPortField); 
  
-  FStickySlider = new PCheckBox(15, 250, "Sticky Slider");
+  FStickySlider = new PCheckBox(15, 320, "Sticky Slider");
   FWidgetContainer.addWidget(FStickySlider);
   
-  FShowModifier = new PCheckBox(col2x, 250, "Show Modifier");
+  FShowModifier = new PCheckBox(col2x, 320, "Show Modifier");
   FWidgetContainer.addWidget(FShowModifier);
   
-  FShowLabels = new PCheckBox(15, 320, "Show Labels");
+  FShowLabels = new PCheckBox(15, 390, "Show Labels");
   FShowLabels.setChecked(true);
   FWidgetContainer.addWidget(FShowLabels);
   
-  FShowValues = new PCheckBox(col2x, 320, "Show Values");
+  FShowValues = new PCheckBox(col2x, 390, "Show Values");
   FShowValues.setChecked(true);
   FWidgetContainer.addWidget(FShowValues);
  
-  FSendTouches = new PCheckBox(15, 410, "Send Touches");
+ 
+  FSendTouches = new PCheckBox(15, 530, "Touches");
   FSendTouches.setChecked(true);
   FWidgetContainer.addWidget(FSendTouches);
   
-  FSendAcceleration = new PCheckBox(15, 480, "Send Acceleration");
+  FSendMagneticField = new PCheckBox(col2x, 530, "Magnetic Field");
+  FWidgetContainer.addWidget(FSendMagneticField);
+  
+  FSendAcceleration = new PCheckBox(15, 610, "Acceleration");
   FWidgetContainer.addWidget(FSendAcceleration);
   
-  FSendOrientation = new PCheckBox(15, 550, "Send Orientation");
+  FSendOrientation = new PCheckBox(col2x, 610, "Orientation");
   FWidgetContainer.addWidget(FSendOrientation);
-  
-  FSendMagneticField = new PCheckBox(15, 620, "Send Magnetic Field");
-  FWidgetContainer.addWidget(FSendMagneticField);
 
-  FOKButton = new PButton(15, height - 90, 150, 70, "OK");
+
+  FOKButton = new PButton(15, height - 90, 150, 70, "Save");
   FWidgetContainer.addWidget(FOKButton);
   FWidgetContainer.hide();
 }
@@ -113,12 +116,15 @@ void drawMenu()
   fill(255);
   textAlign(LEFT);
   textFont(fontB, 48);
-  text("Kontrolleur", 15, 50); 
+  text("Kontrolleur", 15, 60); 
+  textFont(fontA, 24);
+  text(CVersion, width-170, 60); 
   
-  textFont(fontA, 24);
   text("Target IP Address", 15, 130); 
-  textFont(fontA, 24);
   text("Target UDP Port", 15, 200); 
+  text("Local IP Address      " + getLocalIP(), 15, 270); 
+  
+  text("Send", 15, 520); 
 }
 
 void reset()

@@ -4,7 +4,7 @@
 //Daniel Sauter et al: http://code.google.com/p/ketai/
 
 //todo
-//- export as apk, include logo
+//- export as apk
 
 //- send touches as tuio
 //- settings page: display device IP, device port
@@ -28,6 +28,7 @@ int CTouch = 154;
 int CModifierPanelHeight = 100;
 int GValueHeight = height - CModifierPanelHeight;
 int GValueTop;
+String CVersion = "beta1";
 String FLocalIP;
 
 void setup() 
@@ -41,6 +42,8 @@ void setup()
   fontA = loadFont("Verdana-24.vlw");
   fontB = loadFont("Verdana-48.vlw");
   
+  FLocalIP = getLocalIP();
+  
   initMenu();
   if (loadSettings())
   {
@@ -49,11 +52,6 @@ void setup()
   }
   else
     toggleMenu();
-
-  //get device IP
-  WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-  WifiInfo info = wifi.getConnectionInfo();
-  FLocalIP = Formatter.formatIpAddress(info.getIpAddress());
   
   FSensorManager = new KetaiSensorManager(this);
   Orientation = new PVector();
@@ -66,8 +64,7 @@ void setup()
 void draw() 
 {
   background(CBack);  
-  //text(FLocalIP, width - 300, height - 100);
-  
+
   if (FMenuVisible)
   {
     drawMenu();

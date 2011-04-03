@@ -1,5 +1,11 @@
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
+
 String CSaveFile = "kontrolleur.xml";
 String CSaveTag = "KONTROLLEUR";
+String CNoNetwork = "no network found!";
 
 void saveSettings()
 {
@@ -27,7 +33,7 @@ boolean loadSettings()
   try 
   {
     XMLElement settings = XMLElement.parse(br);
-    FIPField.setText(settings.getString("IP", "192.168.0.255"));
+    FIPField.setText(settings.getString("IP", getTargetIP()));
     //hack: after setting IP make this a numberfield
     FIPField.setInputType(InputType.TYPE_CLASS_NUMBER);
     
