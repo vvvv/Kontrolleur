@@ -27,7 +27,7 @@ class Touch
   {
     motionX = me.getX(index);
     motionY = me.getY(index);
-    Pressure = me.getPressure(index) * 200;
+    Pressure = me.getPressure(index);
 
     PointerID = me.getPointerId(index);
     Touched = true;
@@ -49,10 +49,27 @@ class Touch
   
   void paint()
   {
-    float r = Pressure + 40; 
-    ellipse(motionX, motionY, r, r);
-    textAlign(CENTER);
-    text(Integer.toString(PointerID), motionX, motionY - (Pressure+50));
+    stroke(CSlider);
+    line(0, motionY, width, motionY);
+    line(motionX, 0, motionX, height);
+   
+    if (FRemoteValues.size() == 0)
+    {
+       textAlign(LEFT);
+       textFont(fontA, 18);
+       String txt = Integer.toString(PointerID);
+       float x = min(motionX + 5, width - 80);
+       float y = max(motionY - 120, 30);
+       text(txt, x, y);
+       
+       y = max(motionY - 100, 50);
+       txt = Integer.toString((int)motionX) + "|" + Integer.toString((int)motionY);
+       text(txt, x, y);
+       
+       y = max(motionY - 80, 70);
+       txt = String.format("%.4f", Pressure);
+       text(txt, x, y);
+    }
   }
 }
 

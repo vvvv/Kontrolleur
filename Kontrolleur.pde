@@ -4,8 +4,7 @@
 //Daniel Sauter et al: http://code.google.com/p/ketai/
 
 //todo
-//- draw values at pointer
-//- draw xypressure at pointer if no value present
+//- export as apk, include logo
 
 //- send touches as tuio
 //- settings page: display device IP, device port
@@ -100,18 +99,7 @@ void draw()
       x += bW + spalt;
     }
   }
-    
-  //draw values
-  textFont(fontB, 48);
-  synchronized(this)
-  {
-    for(String key: FRemoteValues.keySet())
-    {
-      RemoteValue rm = FRemoteValues.get(key);
-      rm.paint();
-    }
-  }
-  
+   
   //draw value separators
   stroke(CSeparators);
   float y = GValueTop;
@@ -130,6 +118,17 @@ void draw()
     {
       Touch t = FTouches.get(key);
       t.paint();
+    }
+  }
+  
+  //draw values
+  textFont(fontB, 48);
+  synchronized(this)
+  {
+    for(String key: FRemoteValues.keySet())
+    {
+      RemoteValue rm = FRemoteValues.get(key);
+      rm.paint();
     }
   }
  

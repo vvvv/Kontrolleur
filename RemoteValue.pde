@@ -88,11 +88,7 @@ class RemoteValue
   void paintValue()
   {
     fill(CText);
-    if (FShowValues.isChecked())
-    {
-      textAlign(RIGHT);
-      text(String.format("%.4f", Value), width - 15, FTextY);
-    }
+    textFont(fontB, 48);
   }
 }
 
@@ -108,6 +104,9 @@ class RemoteSlider extends RemoteValue
   
   void changeValue(float x)
   {
+    if (!FMouseDown)
+      FMouseDown = true;
+      
     float range = (Maximum + 1) - Minimum;
     float posCount = range / FStepSize;
     x = map(x, 0, width, 0, 1);
@@ -132,11 +131,22 @@ class RemoteSlider extends RemoteValue
   
   void paintValue()
   {
-    fill(CText);
+    super.paintValue();
+    String txt = String.format("%d", (int)Value);
+    
     if (FShowValues.isChecked())
     {
       textAlign(RIGHT);
-      text(String.format("%d", (int)Value), width - 15, FTextY);
+      text(txt, width - 15, FTextY);
+    }
+    
+    if (FMouseDown)
+    {
+      textAlign(LEFT);
+      textFont(fontA, 24);
+      float x = map(Value, Minimum, Maximum, 0, width);
+      x = min(max(5, x), width - 60);
+      text(txt, x, FSliderY + 20);
     }
   }
 }
@@ -180,6 +190,25 @@ class RemoteEndless extends RemoteValue
     
     paintLabel();
     paintValue();    
+  }
+  
+  void paintValue()
+  {
+    super.paintValue();
+    String txt = String.format("%.4f", Value);
+    if (FShowValues.isChecked())
+    {
+      textAlign(RIGHT);
+      text(txt, width - 15, FTextY);
+    }
+    
+    if (FMouseDown)
+    {
+      textAlign(LEFT);
+      textFont(fontA, 24);
+      float x = min(max(5, FLastX), width - 100);
+      text(txt, x, FSliderY + 20);
+    }
   }
 }
 
