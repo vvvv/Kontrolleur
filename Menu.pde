@@ -122,7 +122,7 @@ void drawMenu()
   
   text("Target IP Address", 15, 130); 
   text("Target UDP Port", 15, 200); 
-  text("Local IP Address      " + getLocalIP(), 15, 270); 
+  text("Local IP & Port    " + getLocalIP() + ":" + CKontrolleurPort, 15, 270); 
   
   text("Send", 15, 520); 
 }

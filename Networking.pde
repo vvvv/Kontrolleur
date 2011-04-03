@@ -8,7 +8,6 @@ import android.text.format.Formatter;
 
 OscP5 FNetwork;
 NetAddress FTargetNetAddress;
-int FKontrollerPort = 4445;
 boolean FNetworkIsUp;
 
 void initNetwork()
@@ -19,7 +18,7 @@ void initNetwork()
     FNetwork.dispose();
   }    
 
-  FNetwork = new OscP5(this, FKontrollerPort);
+  FNetwork = new OscP5(this, CKontrolleurPort);
   
   String ip = FIPField.getText();
   int port = Integer.parseInt(FPortField.getText());

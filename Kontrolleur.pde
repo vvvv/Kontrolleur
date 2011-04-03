@@ -1,11 +1,9 @@
 //credits: 
-//Eric Pavey: http://www.akeric.com/blog/?p=1435
+//Eric Pavey: http://www.akeric.com/blog/?p=1435 + http://www.akeric.com/blog/?p=1352
 //Rikard Lundstedt: http://code.google.com/p/apwidgets/
 //Daniel Sauter et al: http://code.google.com/p/ketai/
 
 //todo
-//- export as apk
-
 //- send touches as tuio
 //- settings page: display device IP, device port
 //- support screen orientations
@@ -29,6 +27,7 @@ int CModifierPanelHeight = 100;
 int GValueHeight = height - CModifierPanelHeight;
 int GValueTop;
 String CVersion = "beta1";
+int CKontrolleurPort = 4444;
 String FLocalIP;
 
 void setup() 
