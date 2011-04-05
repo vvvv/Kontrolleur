@@ -23,46 +23,46 @@ void initMenu()
   int col2x = width - 245;
   FWidgetContainer = new PWidgetContainer(this);
 
-  FIPField = new PEditText(col2x, 90, 230, 70);
+  FIPField = new PEditText(col2x, 180, 230, 70);
   FIPField.setText(getTargetIP());
   FIPField.setImeOptions(EditorInfo.IME_ACTION_DONE);
   FIPField.setInputType(InputType.TYPE_CLASS_NUMBER);
   FIPField.setCloseImeOnDone(true);
   FWidgetContainer.addWidget(FIPField); 
   
-  FPortField = new PEditText(col2x, 160, 150, 70);
+  FPortField = new PEditText(col2x, 250, 150, 70);
   FPortField.setText("4444");
   FPortField.setInputType(InputType.TYPE_CLASS_NUMBER);
   FPortField.setImeOptions(EditorInfo.IME_ACTION_DONE);
   FPortField.setCloseImeOnDone(true);
   FWidgetContainer.addWidget(FPortField); 
  
-  FStickySlider = new PCheckBox(15, 320, "Sticky Slider");
+  FStickySlider = new PCheckBox(15, 330, "Sticky Slider");
   FWidgetContainer.addWidget(FStickySlider);
   
-  FShowModifier = new PCheckBox(col2x, 320, "Show Modifier");
+  FShowModifier = new PCheckBox(col2x, 330, "Show Modifier");
   FWidgetContainer.addWidget(FShowModifier);
   
-  FShowLabels = new PCheckBox(15, 390, "Show Labels");
+  FShowLabels = new PCheckBox(15, 400, "Show Labels");
   FShowLabels.setChecked(true);
   FWidgetContainer.addWidget(FShowLabels);
   
-  FShowValues = new PCheckBox(col2x, 390, "Show Values");
+  FShowValues = new PCheckBox(col2x, 400, "Show Values");
   FShowValues.setChecked(true);
   FWidgetContainer.addWidget(FShowValues);
  
  
-  FSendTouches = new PCheckBox(15, 530, "Touches");
+  FSendTouches = new PCheckBox(15, 540, "Touches");
   FSendTouches.setChecked(true);
   FWidgetContainer.addWidget(FSendTouches);
   
-  FSendMagneticField = new PCheckBox(col2x, 530, "Magnetic Field");
+  FSendMagneticField = new PCheckBox(col2x, 540, "Magnetic Field");
   FWidgetContainer.addWidget(FSendMagneticField);
   
-  FSendAcceleration = new PCheckBox(15, 610, "Acceleration");
+  FSendAcceleration = new PCheckBox(15, 620, "Acceleration");
   FWidgetContainer.addWidget(FSendAcceleration);
   
-  FSendOrientation = new PCheckBox(col2x, 610, "Orientation");
+  FSendOrientation = new PCheckBox(col2x, 620, "Orientation");
   FWidgetContainer.addWidget(FSendOrientation);
 
 
@@ -120,9 +120,11 @@ void drawMenu()
   textFont(fontA, 24);
   text(CVersion, width-170, 60); 
   
-  text("Target IP Address", 15, 130); 
-  text("Target UDP Port", 15, 200); 
-  text("Local IP & Port    " + getLocalIP() + ":" + CKontrolleurPort, 15, 270); 
+  text("IP & Port: " + FLocalIP + ":" + FLocalPort, 15, 110); 
+  text("Screen Resolution: " + width + "x" + height, 15, 150); 
+
+  text("Target IP Address", 15, 220); 
+  text("Target UDP Port", 15, 290); 
   
   text("Send", 15, 520); 
 }
@@ -132,8 +134,12 @@ void reset()
   println("-----update-----");
   
   OscBundle bundle = new OscBundle();
-  OscMessage message = new OscMessage("/k/reset");
-  bundle.add(message);
+  OscMessage m = new OscMessage("/k/init");
+  m.add(FLocalIP);
+  m.add(FLocalPort);
+  m.add(width);
+  m.add(height);
+  bundle.add(m);
   sendBundle(bundle);
 
   synchronized(this)

@@ -18,7 +18,7 @@ void initNetwork()
     FNetwork.dispose();
   }    
 
-  FNetwork = new OscP5(this, CKontrolleurPort);
+  FNetwork = new OscP5(this, FLocalPort);
   
   String ip = FIPField.getText();
   int port = Integer.parseInt(FPortField.getText());
@@ -75,29 +75,26 @@ void oscEvent(OscMessage message)
     {
       //println("adding: " + address);
       int id = FRemoteValues.size();
-      RemoteValue rm;
-      if (type.equals("Bang"))
-        rm = new RemoteBang(id, address, name, minimum, maximum, value); 
-      else if (type.equals("Toggle"))
-        rm = new RemoteToggle(id, address, name, defaultValue, minimum, maximum, value); 
-      else if (type.equals("Slider"))
-        rm = new RemoteSlider(id, address, name, defaultValue, minimum, maximum, stepsize, value);
-      else //if (type.equals("Endless"))
-        rm = new RemoteEndless(id, address, name, defaultValue, minimum, maximum, stepsize, value); 
-
-      synchronized(this)
-      {
-        FRemoteValues.put(address, rm);
-      }
+      addRemoteValue(type, id, address, name, defaultValue, minimum, maximum, stepsize, value);
     }
   }
   else if (message.checkAddrPattern("/k/update"))
   {
-    RemoteValue rm = (RemoteValue) FRemoteValues.get(address);
-    rm.Name = name;
-    rm.Minimum = minimum;
-    rm.Maximum = maximum;
-    rm.Value = value;
+    RemoteValue rm = FRemoteValues.get(address);
+    if (!rm.Type.equals(type))
+    {
+      int id = rm.ID;
+      rm = null;
+      addRemoteValue(type, id, address, name, defaultValue, minimum, maximum, stepsize, value);
+    }
+    else
+    {
+      rm.Name = name;
+      rm.DefaultValue = defaultValue;
+      rm.Minimum = minimum;
+      rm.Maximum = maximum;
+      rm.Value = value;
+    }
   }   
   else if (message.checkAddrPattern("/k/remove"))
   {
@@ -121,6 +118,25 @@ void oscEvent(OscMessage message)
     
   //recompute the values height
   GValueHeight = (height - GValueTop) / FRemoteValues.size();
+}
+
+void addRemoteValue(String type, int id, String address, String name, float defaultValue, float minimum, float maximum, float stepsize, float value)
+{
+  RemoteValue rm;
+  if (type.equals("Bang"))
+    rm = new RemoteBang(id, address, name, minimum, maximum, value); 
+  else if (type.equals("Toggle"))
+    rm = new RemoteToggle(id, address, name, defaultValue, minimum, maximum, value); 
+  else if (type.equals("Slider"))
+    rm = new RemoteSlider(id, address, name, defaultValue, minimum, maximum, stepsize, value);
+  else //if (type.equals("Endless"))
+    rm = new RemoteEndless(id, address, name, defaultValue, minimum, maximum, stepsize, value); 
+
+  rm.Type = type;
+  synchronized(this)
+  {
+    FRemoteValues.put(address, rm);
+  }
 }
 
 //ripped of: http://www.droidnova.com/get-the-ip-address-of-your-device,304.html

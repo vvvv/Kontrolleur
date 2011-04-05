@@ -2,6 +2,7 @@ class RemoteValue
 {
   public int ID;
   String FAddress;
+  public String Type;
   public String Name;
   public float Minimum;
   public float Maximum;
@@ -77,9 +78,10 @@ class RemoteValue
   
   void paintLabel()
   {
-    fill(CText);
     if (FShowLabels.isChecked())
     {
+      fill(CText);
+      textFont(fontB, 48);
       textAlign(LEFT);
       text(Name, 15, FTextY);    
     }
@@ -87,8 +89,11 @@ class RemoteValue
   
   void paintValue()
   {
-    fill(CText);
-    textFont(fontB, 48);
+    if (FShowValues.isChecked())
+    {
+      fill(CText);
+      textFont(fontB, 48);
+    }
   }
 }
 
@@ -142,6 +147,7 @@ class RemoteSlider extends RemoteValue
     
     if (FMouseDown)
     {
+      fill(CText);
       textAlign(LEFT);
       textFont(fontA, 24);
       float x = map(Value, Minimum, Maximum, 0, width);
@@ -204,6 +210,7 @@ class RemoteEndless extends RemoteValue
     
     if (FMouseDown)
     {
+      fill(CText);
       textAlign(LEFT);
       textFont(fontA, 24);
       float x = min(max(5, FLastX), width - 100);

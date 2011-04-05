@@ -140,7 +140,7 @@ public boolean surfaceTouchEvent(MotionEvent me)
       for(Integer key: FTouches.keySet())
       {
         Touch t = FTouches.get(key);
-        if (t.motionY < CModifierPanelHeight)
+        if (t.motionY < GValueTop)
         {
           FModifierID = (int) (t.motionX / (width / 4));
           switch (FModifierID)
@@ -176,13 +176,20 @@ public boolean surfaceTouchEvent(MotionEvent me)
   
       if (FSendTouches.isChecked())
       {
+        OscMessage m = new OscMessage("/touches");
+
         for(Integer key: FTouches.keySet())
         {
           Touch t = FTouches.get(key);
-          t.addMessage(bundle);
+          m.add(t.PointerID);
+          m.add(t.motionX);
+          m.add(t.motionY);
+          m.add(t.Pressure);          
         }
+        
+        bundle.add(m);
+        sendBundle(bundle);  
       }
-      sendBundle(bundle);  
       break;
     }
   }

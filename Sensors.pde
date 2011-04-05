@@ -40,7 +40,7 @@ void addAcceleration(OscBundle bundle)
 
 void addMagneticField(OscBundle bundle) 
 {
-  OscMessage m = new OscMessage("/magnetic");
+  OscMessage m = new OscMessage("/magnetism");
   m.add(MagneticField.x);
   m.add(MagneticField.y);
   m.add(MagneticField.z);

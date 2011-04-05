@@ -27,7 +27,7 @@ int CModifierPanelHeight = 100;
 int GValueHeight = height - CModifierPanelHeight;
 int GValueTop;
 String CVersion = "beta1";
-int CKontrolleurPort = 4444;
+int FLocalPort = 4444;
 String FLocalIP;
 
 void setup() 
@@ -63,6 +63,16 @@ void setup()
 void draw() 
 {
   background(CBack);  
+  
+  //send sensors
+  OscBundle bundle = new OscBundle();
+  if (FSendAcceleration.isChecked())
+    addAcceleration(bundle);
+  if (FSendOrientation.isChecked())
+    addOrientation(bundle);  
+  if (FSendMagneticField.isChecked())
+    addMagneticField(bundle);
+  sendBundle(bundle);
 
   if (FMenuVisible)
   {
@@ -127,16 +137,6 @@ void draw()
       rm.paint();
     }
   }
- 
-  //send sensors
-  OscBundle bundle = new OscBundle();
-  if (FSendAcceleration.isChecked())
-    addAcceleration(bundle);
-  if (FSendOrientation.isChecked())
-    addOrientation(bundle);  
-  if (FSendMagneticField.isChecked())
-    addMagneticField(bundle);
-  sendBundle(bundle);
 }
 
 void keyPressed()
