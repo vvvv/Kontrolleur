@@ -25,7 +25,7 @@ void initNetwork()
   FTargetNetAddress = new NetAddress(ip, port);
   
   FNetworkIsUp = true;
-  println("Target: " + ip + ":" + port);
+  //println("Target: " + ip + ":" + port);
 }
 
 void sendBundle(OscBundle bundle)
@@ -60,6 +60,7 @@ void oscEvent(OscMessage message)
   //read arguments if tjis is an add or update message
   if (message.checkTypetag("sssfffff"))
   {
+    //println("typetags?: " + address);
     name = message.get(1).stringValue();
     type = message.get(2).stringValue();
     defaultValue = message.get(3).floatValue();
@@ -71,6 +72,7 @@ void oscEvent(OscMessage message)
    
   if (message.checkAddrPattern("/k/add")) 
   { 
+    //println("contains?: " + address);
     if (!FRemoteValues.containsKey(address))
     {
       //println("adding: " + address);

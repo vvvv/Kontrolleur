@@ -96,13 +96,13 @@ void toggleMenu()
   if (FMenuVisible)
   {
     FWidgetContainer.hide();
-    FMenuVisible = false;
     if (FTargetChanged)
     {
       initNetwork();
       FTargetChanged = false;
     }
     reset();
+    FMenuVisible = false;
   }
   else
   {
@@ -131,7 +131,12 @@ void drawMenu()
 
 void reset()
 {
-  println("-----update-----");
+  //println("-----update-----");
+
+  synchronized(this)
+  {
+    FRemoteValues.clear();
+  }
   
   OscBundle bundle = new OscBundle();
   OscMessage m = new OscMessage("/k/init");
@@ -141,9 +146,4 @@ void reset()
   m.add(height);
   bundle.add(m);
   sendBundle(bundle);
-
-  synchronized(this)
-  {
-    FRemoteValues.clear();
-  }
 }

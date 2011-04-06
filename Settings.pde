@@ -46,6 +46,12 @@ boolean loadSettings()
     FSendAcceleration.setChecked(settings.getBoolean("SendAcceleration", false));
     FSendOrientation.setChecked(settings.getBoolean("SendOrientation", false));
     FSendMagneticField.setChecked(settings.getBoolean("SendMagneticField", false));
+    
+    if (FShowModifier.isChecked())
+      GValueTop = CModifierPanelHeight;
+    else
+      GValueTop = 0;
+    
     return (settings.getAttributeCount() > 0);
   } 
   catch (NullPointerException e) 
