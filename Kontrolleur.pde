@@ -5,10 +5,9 @@
 
 //todo
 //- send touches as tuio
-//- settings page: display device IP, device port
 //- support screen orientations
 //- support radiobutton, XYPressure, color, string
-//- multiple parameter pages (one per address-space)
+//- multiple parameter pages (one per address-space or prefix?)
 //- ordering/layout of values
 //- support spreads
 
