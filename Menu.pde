@@ -26,7 +26,7 @@ void initMenu()
   FIPField = new PEditText(col2x, 180, 230, 70);
   FIPField.setText(getTargetIP());
   FIPField.setImeOptions(EditorInfo.IME_ACTION_DONE);
-  FIPField.setInputType(InputType.TYPE_CLASS_NUMBER);
+  FIPField.setInputType(InputType.TYPE_CLASS_PHONE);
   FIPField.setCloseImeOnDone(true);
   FWidgetContainer.addWidget(FIPField); 
   

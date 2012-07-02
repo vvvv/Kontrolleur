@@ -4,12 +4,17 @@
 //Daniel Sauter et al: http://code.google.com/p/ketai/
 
 //todo
-//- send touches as tuio
-//- support screen orientations
+//- prevent phone from sleeping
 //- support radiobutton, XYPressure, color, string
-//- multiple parameter pages (one per address-space or prefix?)
 //- ordering/layout of values
 //- support spreads
+//- sending sensors prevents from updating remotevalues
+//- add debug option to see incoming/outgoing network messages
+
+//- work around osc/udp packet limits
+//- send touches as tuio
+//- support screen orientations
+//- multiple parameter pages (one per address-space or prefix?)
 
 PFont fontA, fontB;
 
@@ -25,7 +30,7 @@ int CTouch = 154;
 int CModifierPanelHeight = 100;
 int GValueHeight = height - CModifierPanelHeight;
 int GValueTop;
-String CVersion = "beta1";
+String CVersion = "beta2";
 int FLocalPort = 4444;
 String FLocalIP;
 

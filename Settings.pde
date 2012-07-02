@@ -9,21 +9,21 @@ String CNoNetwork = "no network found!";
 
 void saveSettings()
 {
-  XMLElement settings = new XMLElement(CSaveTag);
-  
+  XML settings = new XML(CSaveTag);
   settings.setString("IP", FIPField.getText());
+  
   settings.setString("Port", FPortField.getText());
-  settings.setBoolean("StickySlider", FStickySlider.isChecked());
-  settings.setBoolean("ShowModifier", FShowModifier.isChecked());
-  settings.setBoolean("ShowLabels", FShowLabels.isChecked());
-  settings.setBoolean("ShowValues", FShowValues.isChecked());
-  settings.setBoolean("SendTouches", FSendTouches.isChecked());
-  settings.setBoolean("SendAcceleration", FSendAcceleration.isChecked());
-  settings.setBoolean("SendOrientation", FSendOrientation.isChecked());
-  settings.setBoolean("SendMagneticField", FSendMagneticField.isChecked());
+  settings.setInt("StickySlider", int(FStickySlider.isChecked()));
+  settings.setInt("ShowModifier", int(FShowModifier.isChecked()));
+  settings.setInt("ShowLabels", int(FShowLabels.isChecked()));
+  settings.setInt("ShowValues", int(FShowValues.isChecked()));
+  settings.setInt("SendTouches", int(FSendTouches.isChecked()));
+  settings.setInt("SendAcceleration", int(FSendAcceleration.isChecked()));
+  settings.setInt("SendOrientation", int(FSendOrientation.isChecked()));
+  settings.setInt("SendMagneticField", int(FSendMagneticField.isChecked()));
   
   PrintWriter pw = createWriter(CSaveFile);
-  settings.write(pw);
+  settings.save(pw);
 }
 
 boolean loadSettings()
@@ -32,20 +32,18 @@ boolean loadSettings()
 
   try 
   {
-    XMLElement settings = XMLElement.parse(br);
+    XML settings = new XML(br);
+
     FIPField.setText(settings.getString("IP", getTargetIP()));
-    //hack: after setting IP make this a numberfield
-    FIPField.setInputType(InputType.TYPE_CLASS_NUMBER);
-    
     FPortField.setText(settings.getString("Port", "4444"));
-    FStickySlider.setChecked(settings.getBoolean("StickySlider", false));
-    FShowModifier.setChecked(settings.getBoolean("ShowModifier", false));
-    FShowLabels.setChecked(settings.getBoolean("ShowLabels", true));
-    FShowValues.setChecked(settings.getBoolean("ShowValues", true));
-    FSendTouches.setChecked(settings.getBoolean("SendTouches", true));
-    FSendAcceleration.setChecked(settings.getBoolean("SendAcceleration", false));
-    FSendOrientation.setChecked(settings.getBoolean("SendOrientation", false));
-    FSendMagneticField.setChecked(settings.getBoolean("SendMagneticField", false));
+    FStickySlider.setChecked(boolean(settings.getInt("StickySlider", 0)));
+    FShowModifier.setChecked(boolean(settings.getInt("ShowModifier", 0)));
+    FShowLabels.setChecked(boolean(settings.getInt("ShowLabels", 1)));
+    FShowValues.setChecked(boolean(settings.getInt("ShowValues", 1)));
+    FSendTouches.setChecked(boolean(settings.getInt("SendTouches", 1)));
+    FSendAcceleration.setChecked(boolean(settings.getInt("SendAcceleration", 0)));
+    FSendOrientation.setChecked(boolean(settings.getInt("SendOrientation", 0)));
+    FSendMagneticField.setChecked(boolean(settings.getInt("SendMagneticField", 0)));
     
     if (FShowModifier.isChecked())
       GValueTop = CModifierPanelHeight;
@@ -54,10 +52,8 @@ boolean loadSettings()
     
     return (settings.getAttributeCount() > 0);
   } 
-  catch (NullPointerException e) 
+  catch (Exception e) 
   {
-    //hack: after setting IP make this a numberfield
-    FIPField.setInputType(InputType.TYPE_CLASS_NUMBER);
     return false;
   }
 }
