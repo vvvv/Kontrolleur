@@ -147,26 +147,14 @@ String getLocalIP()
 {
   try 
   {
-    for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) 
-    {
-      NetworkInterface intf = en.nextElement();
-      for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) 
-      {
-        InetAddress inetAddress = enumIpAddr.nextElement();
-        if (!inetAddress.isLoopbackAddress()) 
-        {
-          return inetAddress.getHostAddress().toString();
-        }
-      }
-    }
+    WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+    WifiInfo info = wifi.getConnectionInfo();
+    FLocalIP = Formatter.formatIpAddress(info.getIpAddress());
+    return FLocalIP;
   } 
-  catch (SocketException ex) {}
+  catch (Exception ex) 
+  {}
   return CNoNetwork;
-
-/*  //not working: get device IP
-  WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-  WifiInfo info = wifi.getConnectionInfo();
-  FLocalIP = Formatter.formatIpAddress(info.getIpAddress());*/
 }
 
 String getTargetIP()
