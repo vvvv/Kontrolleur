@@ -31,7 +31,7 @@ void initMenu()
   FWidgetContainer.addWidget(FIPField); 
   
   FPortField = new PEditText(col2x, 250, 150, 70);
-  FPortField.setText("4444");
+  FPortField.setText("44444");
   FPortField.setInputType(InputType.TYPE_CLASS_NUMBER);
   FPortField.setImeOptions(EditorInfo.IME_ACTION_DONE);
   FPortField.setCloseImeOnDone(true);

@@ -31,7 +31,7 @@ int CModifierPanelHeight = 100;
 int GValueHeight = height - CModifierPanelHeight;
 int GValueTop;
 String CVersion = "beta2";
-int FLocalPort = 4444;
+int FLocalPort = 44444;
 String FLocalIP;
 
 void setup() 
