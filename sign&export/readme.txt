@@ -1,0 +1,5 @@
+- in processing run: export android project
+- this creates an \android directory
+- copy files from \sign&export to \android
+- up android:versionCode in AndroidManifest.xml
+- run batch 1 to 3. passphrase: vvvvvv

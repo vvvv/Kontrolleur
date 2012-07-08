@@ -35,7 +35,7 @@ boolean loadSettings()
     XML settings = new XML(br);
 
     FIPField.setText(settings.getString("IP", getTargetIP()));
-    FPortField.setText(settings.getString("Port", "4444"));
+    FPortField.setText(settings.getString("Port", "44444"));
     FStickySlider.setChecked(boolean(settings.getInt("StickySlider", 0)));
     FShowModifier.setChecked(boolean(settings.getInt("ShowModifier", 0)));
     FShowLabels.setChecked(boolean(settings.getInt("ShowLabels", 1)));

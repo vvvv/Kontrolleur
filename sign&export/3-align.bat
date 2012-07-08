@@ -1,1 +1,1 @@
-zipalign -v 4 bin\Kontrolleur-unsigned.apk Kontrolleur.apk
+zipalign -v 4 bin\Kontrolleur-release-unsigned.apk Kontrolleur.apk
