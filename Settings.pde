@@ -21,6 +21,7 @@ void saveSettings()
   settings.setInt("SendAcceleration", int(FSendAcceleration.isChecked()));
   settings.setInt("SendOrientation", int(FSendOrientation.isChecked()));
   settings.setInt("SendMagneticField", int(FSendMagneticField.isChecked()));
+  settings.setInt("SendLocation", int(FSendLocation.isChecked()));
   
   PrintWriter pw = createWriter(CSaveFile);
   settings.save(pw);
@@ -44,6 +45,7 @@ boolean loadSettings()
     FSendAcceleration.setChecked(boolean(settings.getInt("SendAcceleration", 0)));
     FSendOrientation.setChecked(boolean(settings.getInt("SendOrientation", 0)));
     FSendMagneticField.setChecked(boolean(settings.getInt("SendMagneticField", 0)));
+    FSendLocation.setChecked(boolean(settings.getInt("SendLocation", 0)));
     
     if (FShowModifier.isChecked())
       GValueTop = CModifierPanelHeight;

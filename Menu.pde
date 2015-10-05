@@ -14,6 +14,7 @@ PCheckBox FSendTouches;
 PCheckBox FSendAcceleration;
 PCheckBox FSendOrientation;
 PCheckBox FSendMagneticField;
+PCheckBox FSendLocation;
 
 boolean FMenuVisible = false;
 boolean FTargetChanged = true;
@@ -65,6 +66,8 @@ void initMenu()
   FSendOrientation = new PCheckBox(col2x, 620, "Orientation");
   FWidgetContainer.addWidget(FSendOrientation);
 
+  FSendLocation = new PCheckBox(15, 700, "Location");
+  FWidgetContainer.addWidget(FSendLocation);
 
   FOKButton = new PButton(15, height - 90, 150, 70, "Save");
   FWidgetContainer.addWidget(FOKButton);

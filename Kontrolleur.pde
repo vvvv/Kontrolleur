@@ -60,6 +60,7 @@ void setup()
   Orientation = new PVector();
   Acceleration = new PVector();
   MagneticField = new PVector();
+  Location = new PVector();
 
   FSensorManager.start();
 }
@@ -76,6 +77,8 @@ void draw()
     addOrientation(bundle);  
   if (FSendMagneticField.isChecked())
     addMagneticField(bundle);
+  if (FSendLocation.isChecked())
+    addLocation(bundle);
   sendBundle(bundle);
 
   if (FMenuVisible)

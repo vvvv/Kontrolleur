@@ -3,7 +3,7 @@ import edu.uic.ketai.inputService.*;
 import android.content.pm.ActivityInfo;
 
 KetaiSensorManager FSensorManager;
-PVector Orientation, MagneticField, Acceleration;
+PVector Orientation, MagneticField, Acceleration, Location;
    
 void onOrientationSensorEvent(long time, int accuracy, float x, float y, float z)
 {
@@ -18,6 +18,11 @@ void onAccelerometerSensorEvent(long time, int accuracy, float x, float y, float
 void onMagneticFieldSensorEvent(long time, int accuracy, float x, float y, float z)
 {
   MagneticField.set(x, y, z);
+}
+
+void onLocationSensorEvent(float latitude, float longitude, float altitude)
+{
+  Location.set(latitude, longitude, altitude);
 }
 
 void addOrientation(OscBundle bundle) 
@@ -46,3 +51,13 @@ void addMagneticField(OscBundle bundle)
   m.add(MagneticField.z);
   bundle.add(m);
 }
+
+void addLocation(OscBundle bundle)
+{
+  OscMessage m = new OscMessage("/location");
+  m.add(Location.latitude);
+  m.add(Location.longitude);
+  m.add(Location.altitude);
+  bundle.add(m);
+}
+
